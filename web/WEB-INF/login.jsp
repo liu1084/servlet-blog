@@ -15,9 +15,13 @@
     <legend>Sign in</legend>
     <form method="post" action="${pageContext.request.contextPath}/login" autocomplete="off">
         <label for="username">username</label>
-        <input id="username" value="" type="text"/>
+        <input id="username" name="username" value="" type="text"/>
         <label for="password">password</label>
-        <input id="password" value="" type="password"/>
+        <input id="password" name="password" value="" type="password"/>
+
+        <input type="checkbox" name="fav" value="basketball"/>basketball
+        <input type="checkbox" name="fav" value="football"/>football
+        <input type="checkbox" name="fav" value="pingpang"/>pingpang
         <button>submit</button>
     </form>
 </fieldset>
