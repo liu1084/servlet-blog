@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  */
 public class DataSource {
 	private static DataSource dataSource;
-	private ComboPooledDataSource comboPooledDataSource;
+	private ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();
 
 	private DataSource() throws PropertyVetoException {
 		ResourceBundle config = ResourceBundle.getBundle("database", Locale.CHINA);

@@ -8,8 +8,4 @@ public interface IAuth {
 	Boolean checkUserExist(String username);
 
 	Boolean checkPasswordValid(String username, String password);
-
-	void setStatus(Integer status);
-
-	
 }

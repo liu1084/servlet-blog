@@ -4,25 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <servlet>
-        <servlet-name>index</servlet-name>
-        <servlet-class>com.jim.servlet.IndexServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>index</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>signup</servlet-name>
-        <servlet-class>com.jim.servlet.SignupServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>signup</servlet-name>
-        <url-pattern>/signup</url-pattern>
-    </servlet-mapping>
-
-
     <session-config>
         <cookie-config>
             <secure>true</secure>
@@ -30,20 +11,30 @@
     </session-config>
 
     <!--Filter-->
+    <!--<filter>-->
+    <!--<filter-name>BasicAuthorizationFilter</filter-name>-->
+    <!--<filter-class>com.jim.filter.BasicAuthorizationFilter</filter-class>-->
+    <!--<init-param>-->
+    <!--<param-name>username</param-name>-->
+    <!--<param-value>liujun</param-value>-->
+    <!--</init-param>-->
+    <!--<init-param>-->
+    <!--<param-name>password</param-name>-->
+    <!--<param-value>1</param-value>-->
+    <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>BasicAuthorizationFilter</filter-name>-->
+    <!--<url-pattern>/login</url-pattern>-->
+    <!--</filter-mapping>-->
+
     <filter>
-        <filter-name>BasicAuthorizationFilter</filter-name>
-        <filter-class>com.jim.filter.BasicAuthorizationFilter</filter-class>
-        <init-param>
-            <param-name>username</param-name>
-            <param-value>liujun</param-value>
-        </init-param>
-        <init-param>
-            <param-name>password</param-name>
-            <param-value>1</param-value>
-        </init-param>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>com.jim.filter.AuthorizationFilter</filter-class>
     </filter>
     <filter-mapping>
-        <filter-name>BasicAuthorizationFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>AuthorizationFilter</filter-name>
+        <url-pattern>/order</url-pattern>
     </filter-mapping>
+
 </web-app>

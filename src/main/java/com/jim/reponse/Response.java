@@ -22,11 +22,10 @@ public class Response {
 		code1.setCode(code);
 	}
 
-	public static Gson getResult(int code, String msg) {
+	public static String getResult(int code, String msg) {
 		Response response = getInstance(code, msg);
 		Gson gson = new Gson();
-		gson.toJson(response);
-		return gson;
+		return gson.toJson(response);
 	}
 
 	public static Response getInstance(int code, String message) {

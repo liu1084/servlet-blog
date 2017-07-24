@@ -5,19 +5,17 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * Created by jim on 2017/7/17.
  * This class is ...
  */
-@WebServlet
+@WebServlet(name = "index", urlPatterns = {"", "/"}, loadOnStartup = 1)
 public class IndexServlet extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IndexServlet.class);
 	@Override
@@ -30,13 +28,7 @@ public class IndexServlet extends HttpServlet {
 			LOGGER.debug(name + "------->" + req.getHeader(name));
 		}
 
-		res.setLocale(Locale.CHINA);
-		Cookie cookie = new Cookie("name", "liujun");
-		cookie.setSecure(true);
-		cookie.setMaxAge(3600 * 2);
-		cookie.setPath("/");
-		res.addCookie(cookie);
-		res.setHeader("Authorization", "Basic");
+		//res.setHeader("Authorization", "Basic");
 
 
 		try {
