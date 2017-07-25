@@ -20,75 +20,90 @@ public class AuthImpl implements IAuth {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthImpl.class);
 
 	@Override
-	public Boolean checkUserExist(String username) {
-		Boolean result = false;
+	public boolean checkUserExist(String username) {
+		boolean result = false;
+		Connection connection = null;
+		ResultSet resultSet = null;
 		try {
-			Connection connection = DataSource.getInstance().getConnection();
+			connection = DataSource.getInstance().getConnection();
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(" SELECT * FROM `user` t1 ");
+			stringBuilder.append(" SELECT * FROM user t1 ");
 			stringBuilder.append(" WHERE t1.username = ? ");
 			PreparedStatement statement = connection.prepareStatement(stringBuilder.toString());
 			statement.setString(1, username);
-			ResultSet resultSet = statement.executeQuery();
+			resultSet = statement.executeQuery();
 
-			while (resultSet.next()) {
-				LOGGER.debug(resultSet.getString("username"));
-			}
-
-			if (resultSet.getRow() == 0) {
-				result = false;
-			}
-
-			if (resultSet.getRow() > 0) {
+			if (resultSet.next()) {
 				result = true;
 			}
-
 
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			if (resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return result;
 	}
 
 	@Override
-	public Boolean checkPasswordValid(String username, String password) {
-		Boolean result = false;
+	public boolean checkPasswordValid(String username, String password) {
+		boolean result = false;
 		String salt = getSaltByUsername(username);
 
+		Connection connection = null;
 		try {
-			Connection connection = DataSource.getInstance().getConnection();
+			connection = DataSource.getInstance().getConnection();
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(" SELECT * FROM `user` t1 ");
-			stringBuilder.append(" WHERE t1.username = ? ");
-			stringBuilder.append(" WHERE t1.password = ? ");
+			stringBuilder.append(" SELECT * FROM user t1 ");
+			stringBuilder.append(" WHERE 1=1 ");
+			stringBuilder.append(" AND t1.username = ? ");
+			stringBuilder.append(" AND t1.password = ? ");
 			PreparedStatement statement = connection.prepareStatement(stringBuilder.toString());
 			statement.setString(1, username);
 			statement.setString(2, DigestUtils.shaHex(password + salt));
 			ResultSet resultSet = statement.executeQuery();
 
-			if (resultSet.getRow() == 0) {
-				result = false;
-			}
-
-			if (resultSet.getRow() > 0) {
+			if (resultSet.next()) {
 				result = true;
 			}
-
 
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return result;
 	}
 
 	private String getSaltByUsername(String username) {
 		String result = "";
+		Connection connection = null;
 		try {
-			Connection connection = DataSource.getInstance().getConnection();
+			connection = DataSource.getInstance().getConnection();
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append(" SELECT * FROM `user` t1 ");
 			stringBuilder.append(" WHERE t1.username = ? ");
@@ -105,6 +120,14 @@ public class AuthImpl implements IAuth {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return result;
 	}

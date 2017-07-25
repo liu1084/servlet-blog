@@ -1,7 +1,6 @@
 package com.jim.servlet;
 
 import com.jim.constant.ServletConstant;
-import com.jim.reponse.Response;
 import com.jim.service.IAuth;
 import com.jim.service.impl.AuthImpl;
 import org.apache.commons.lang3.ArrayUtils;
@@ -57,20 +56,16 @@ public class SignInServlet extends HttpServlet {
 		}
 
 		if (code >= 500) {
-			Response.write(resp, code, msg);
-			req.getRequestDispatcher("WEB-INF/login.jsp").forward(req, resp);
+			resp.setHeader("code", Integer.toString(code));
+			resp.setHeader("message", msg);
+			req.getRequestDispatcher("WEB-INF/signIn.jsp").forward(req, resp);
+			return;
 		}
 
 		HttpSession session = req.getSession(true);
-
-		if (session.getAttribute("username") == null) {
-			Response.forwardToLogin(req, resp);
-		}
-
-
 		session.setAttribute("username", username);
 
-		if (StringUtils.isNotEmpty(req.getRequestURL().toString()) && !ArrayUtils.contains(req.getServletPath().split("/"), "login")) {
+		if (StringUtils.isNotEmpty(req.getRequestURL().toString()) && !ArrayUtils.contains(req.getServletPath().split("/"), "signIn")) {
 			resp.sendRedirect(req.getRequestURL().toString());
 		} else {
 			req.getRequestDispatcher("WEB-INF/index.jsp").forward(req, resp);

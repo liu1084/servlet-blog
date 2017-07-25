@@ -5,7 +5,7 @@ package com.jim.service;
  * This class is ...
  */
 public interface IAuth {
-	Boolean checkUserExist(String username);
+	boolean checkUserExist(String username);
 
-	Boolean checkPasswordValid(String username, String password);
+	boolean checkPasswordValid(String username, String password);
 }

@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
  * Created by jim on 2017/7/16.
  * This class is ...
  */
+
 public class DataSource {
 	private static DataSource dataSource;
 	private ComboPooledDataSource comboPooledDataSource = new ComboPooledDataSource();

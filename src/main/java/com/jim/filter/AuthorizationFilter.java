@@ -31,8 +31,7 @@ public class AuthorizationFilter implements Filter {
 		String requestURI = req.getRequestURI();
 
 		if ((session == null && !requestURI.endsWith("jsp")) || requestURI.endsWith("signIn")) {
-			req.getRequestDispatcher("WEB-INF/signIn.jsp").forward(req, response);
-			return;
+			response.sendRedirect("signIn");
 		}
 
 		filterChain.doFilter(req, response);
