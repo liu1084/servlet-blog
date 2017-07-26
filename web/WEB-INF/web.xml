@@ -37,4 +37,13 @@
         <url-pattern>/order</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>SignUpFilter</filter-name>
+        <filter-class>com.jim.filter.SignUpFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SignUpFilter</filter-name>
+        <url-pattern>/signUp</url-pattern>
+    </filter-mapping>
 </web-app>

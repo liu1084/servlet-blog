@@ -35,13 +35,18 @@ public class Response {
 		return response;
 	}
 
-	public static void write(HttpServletResponse resp, int code, String msg) throws IOException {
+	public static void write(HttpServletResponse resp, int code, String msg) {
 		resp.setContentType("application/json; charset=UTF-8");
 		resp.setStatus(code);
-		PrintWriter printWriter = resp.getWriter();
-		printWriter.print(Response.getResult(code, msg));
-		printWriter.flush();
-		printWriter.close();
+		PrintWriter printWriter = null;
+		try {
+			printWriter = resp.getWriter();
+			printWriter.print(Response.getResult(code, msg));
+			printWriter.flush();
+			printWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void forwardToLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
