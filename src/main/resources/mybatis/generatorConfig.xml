@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <properties resource="database.properties"/>
+    <classPathEntry location="${driverFileAbsolutionPath}"/>
+    <context id="context1">
+        <jdbcConnection connectionURL="${url}" driverClass="${driverClass}" password="${password}" userId="${username}"/>
+        <javaModelGenerator targetPackage="com.jim.entity" targetProject="servlet-blog"/>
+        <sqlMapGenerator targetPackage="resources/mybaits/mapper" targetProject="servlet-blog"/>
+        <javaClientGenerator targetPackage="com.jim.service" targetProject="servlet-blog" type="XMLMAPPER"/>
+        <table schema="ebook" tableName="user">
+            <property name="username" value="true"/>
+            <property name="password" value="true"/>
+            <property name="email" value="true"/>
+            <property name="salt" value="true"/>
+            <columnOverride column="create_at" property="createAt"/>
+            <columnOverride column="update_at" property="updateAt"/>
+        </table>
+    </context>
+</generatorConfiguration>
