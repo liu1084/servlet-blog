@@ -4,10 +4,10 @@
 <generatorConfiguration>
     <properties resource="database.properties"/>
     <classPathEntry location="${driverFileAbsolutionPath}"/>
-    <context id="context1">
+    <context id="ebook-mybatis">
         <jdbcConnection connectionURL="${url}" driverClass="${driverClass}" password="${password}" userId="${username}"/>
         <javaModelGenerator targetPackage="com.jim.entity" targetProject="servlet-blog"/>
-        <sqlMapGenerator targetPackage="resources/mybaits/mapper" targetProject="servlet-blog"/>
+        <sqlMapGenerator targetPackage="mapper" targetProject="servlet-blog"/>
         <javaClientGenerator targetPackage="com.jim.service" targetProject="servlet-blog" type="XMLMAPPER"/>
         <table schema="ebook" tableName="user">
             <property name="username" value="true"/>
