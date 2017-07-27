@@ -14,23 +14,23 @@
 
 <fieldset>
     <legend>Sign up</legend>
-    <form method="post" action="${pageContext.request.contextPath}/signup" autocomplete="off">
+    <form method="post" action="${pageContext.request.contextPath}/signUp" autocomplete="off">
         <ul>
             <li>
                 <label for="username">username</label>
-                <input id="username" value="" type="text"/>
+                <input id="username" name="username" value="" type="text"/>
             </li>
             <li>
                 <label for="password">password</label>
-                <input id="password" value="" type="password"/>
+                <input id="password" name="password" value="" type="password"/>
             </li>
             <li>
                 <label for="rePassword">rePassword</label>
-                <input id="rePassword" value=""/>
+                <input id="rePassword" name="rePassword" value="" type="password"/>
             </li>
             <li>
                 <label for="email">email</label>
-                <input id="email" value="" type="email"/>
+                <input id="email" name="email" value="" type="email"/>
             </li>
             <li>
                 <button>submit</button>

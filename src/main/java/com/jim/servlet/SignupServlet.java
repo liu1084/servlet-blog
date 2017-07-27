@@ -1,6 +1,11 @@
 package com.jim.servlet;
 
 
+import com.jim.entity.User;
+import com.jim.reponse.Response;
+import com.jim.service.IUser;
+import com.jim.service.impl.UserImpl;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -9,8 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static com.jim.utils.PasswordUtils.checkPassword;
@@ -22,37 +26,59 @@ import static com.jim.utils.PasswordUtils.checkPassword;
 @WebServlet(name = "signUp", urlPatterns = "/signUp")
 public class SignUpServlet extends HttpServlet {
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse res) {
-		res.setContentType("text/html;charset=UTF-8");
-		try {
-			req.getRequestDispatcher("WEB-INF/signUp.jsp").forward(req, res);
-		} catch (ServletException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setContentType("text/html;charset=UTF-8");
+		req.getRequestDispatcher("WEB-INF/signUp.jsp").forward(req, resp);
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) {
-		String username = req.getParameter("username").trim();
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String username = req.getParameter("username");
 		String password = req.getParameter("password");
-		String rePassword = req.getParameter("rePassword");
-		String email = req.getParameter("email").trim();
+		String email = req.getParameter("email");
 
-		if (checkForm(req, resp)) {
-
+		if (!(Boolean) checkForm(req).get("result")) {
+			Response.write(resp, 500, checkForm(req).get("errors"));
+			return;
 		}
+
+		IUser iUser = new UserImpl();
+		User user = new User();
+		String salt = UUID.randomUUID().toString();
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setPassword(DigestUtils.shaHex(password + salt));
+
+		if (StringUtils.isNoneEmpty(iUser.findByUsername(username).getId().toString())) {
+			Response.write(resp, 500, "username is existed");
+			return;
+		}
+
+
+		if (StringUtils.isNoneEmpty(iUser.findByEmail(email).getId().toString())) {
+			Response.write(resp, 500, "email is existed");
+			return;
+		}
+
+		User u = iUser.add(user);
+
+		if (StringUtils.isEmpty(u.getId().toString())) {
+			Response.write(resp, 500, "failed add");
+			return;
+		}
+
+		Response.write(resp, 200, "success");
 
 	}
 
-	private Boolean checkForm(HttpServletRequest req, HttpServletResponse resp) {
+	private Map<String, Object> checkForm(HttpServletRequest req) {
 		String username = req.getParameter("username").trim();
 		String password = req.getParameter("password");
 		String rePassword = req.getParameter("rePassword");
 		String email = req.getParameter("email").trim();
 
 		boolean result = false;
+		Map<String, Object> map = new HashMap<>();
 		List<String> errors = new ArrayList<>();
 
 		if (StringUtils.isBlank(username)) {
@@ -64,7 +90,7 @@ public class SignUpServlet extends HttpServlet {
 			errors.add("username is invalid");
 		}
 
-		if (checkPassword(password) < 7) {
+		if (checkPassword(password) < 10) {
 			errors.add("password is week");
 		}
 
@@ -72,7 +98,7 @@ public class SignUpServlet extends HttpServlet {
 			errors.add("password and rePassword is not matches");
 		}
 
-		pattern = Pattern.compile("\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}\\b");
+		pattern = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
 		if (!pattern.matcher(email).matches()) {
 			errors.add("email is invalid");
 		}
@@ -80,6 +106,10 @@ public class SignUpServlet extends HttpServlet {
 		if (errors.size() == 0) {
 			result = true;
 		}
-		return result;
+
+		map.put("result", result);
+		map.put("errors", errors);
+
+		return map;
 	}
 }

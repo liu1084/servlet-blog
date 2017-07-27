@@ -5,13 +5,13 @@ package com.jim.reponse;
  * This class is ...
  */
 public class Message {
-	private String msg;
+	private Object msg;
 
-	public String getMsg() {
+	public Object getMsg() {
 		return this.msg;
 	}
 
-	public void setMsg(String msg) {
+	public void setMsg(Object msg) {
 		this.msg = msg;
 	}
 }

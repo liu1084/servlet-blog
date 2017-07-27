@@ -15,17 +15,18 @@ public class PasswordUtils {
 			strong--;
 		}
 
-		if (!pattern.matcher(password).matches()) {
+		if (!pattern.matcher(password).find()) {
 			strong--;
 		}
 
 		pattern = Pattern.compile("[^\\d|^\\w|\\s]+");
-		if (!pattern.matcher(password).matches()) {
+
+		if (!pattern.matcher(password).find()) {
 			strong--;
 		}
 
-		pattern = Pattern.compile("[A-Z]+");
-		if (!pattern.matcher(password).matches()) {
+		pattern = Pattern.compile("[A-Z]+", Pattern.CASE_INSENSITIVE);
+		if (!pattern.matcher(password).find()) {
 			strong--;
 		}
 		return strong;
