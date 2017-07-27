@@ -2,13 +2,27 @@
 <!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
+    <!--导入属性配置文件-->
     <properties resource="database.properties"/>
+    <!--指定数据库驱动程序-->
     <classPathEntry location="${driverFileAbsolutionPath}"/>
+
     <context id="ebook-mybatis">
+        <!--指定生成的java文件的字符集-->
+        <property name="javaFileEncoding" value="utf-8"/>
+        <!--不生成注释-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--根据属性配置文件,建立jdbc连接-->
         <jdbcConnection connectionURL="${url}" driverClass="${driverClass}" password="${password}" userId="${username}"/>
+        <!--实体类的包名和项目名-->
         <javaModelGenerator targetPackage="com.jim.entity" targetProject="servlet-blog"/>
+        <!--mapper接口的目录和项目名-->
         <sqlMapGenerator targetPackage="mapper" targetProject="servlet-blog"/>
+        <!--mapper.xml的包名和项目名-->
         <javaClientGenerator targetPackage="com.jim.service" targetProject="servlet-blog" type="XMLMAPPER"/>
+        <!--操作的表名和字段-->
         <table schema="ebook" tableName="user">
             <property name="username" value="true"/>
             <property name="password" value="true"/>
