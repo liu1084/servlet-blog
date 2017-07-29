@@ -43,13 +43,7 @@ public class UserUpdateServlet extends HttpServlet {
 			Response.write(resp, 500, "update failed");
 			return;
 		}
-
-//		if (isAjaxRequest(req)) {
-//			Response.write(resp, 200, "updated");
-//			return;
-//		}
-//
-//		resp.sendRedirect(req.getContextPath() + "/IndexServlet");
+		
 		Response.write(resp, 200, "updated");
 	}
 }

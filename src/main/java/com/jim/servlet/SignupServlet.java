@@ -45,24 +45,28 @@ public class SignUpServlet extends HttpServlet {
 		IUser iUser = new UserImpl();
 		User user = new User();
 		String salt = UUID.randomUUID().toString();
+		String pass = DigestUtils.md5Hex(password + salt);
 		user.setUsername(username);
 		user.setEmail(email);
-		user.setPassword(DigestUtils.shaHex(password + salt));
+		user.setPassword(pass);
 
-		if (StringUtils.isNoneEmpty(iUser.findByUsername(username).getId().toString())) {
+		User check = iUser.findByUsername(username);
+		if (check.getId() != null && StringUtils.isNoneEmpty(check.getId().toString())) {
 			Response.write(resp, 500, "username is existed");
 			return;
 		}
 
 
-		if (StringUtils.isNoneEmpty(iUser.findByEmail(email).getId().toString())) {
+		check = iUser.findByEmail(email);
+
+		if (check.getId() != null && StringUtils.isNoneEmpty(check.getId().toString())) {
 			Response.write(resp, 500, "email is existed");
 			return;
 		}
 
 		User u = iUser.add(user);
 
-		if (StringUtils.isEmpty(u.getId().toString())) {
+		if (StringUtils.isEmpty(u.getUsername())) {
 			Response.write(resp, 500, "failed add");
 			return;
 		}
@@ -85,7 +89,7 @@ public class SignUpServlet extends HttpServlet {
 			errors.add("username is include a white space or username is blank");
 		}
 
-		Pattern pattern = Pattern.compile("[a-z\u4e00-\u9fa5_]+");
+		Pattern pattern = Pattern.compile("^[a-z\\u4e00-\\u9fa5_]+[a-z\\u4e00-\\u9fa5_0-9]*$");
 		if (!pattern.matcher(username).matches()) {
 			errors.add("username is invalid");
 		}

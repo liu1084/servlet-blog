@@ -5,8 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 /**
  * Created by jim on 2017/7/25.
  * This class is ...
@@ -18,9 +16,9 @@ public class PasswordTest {
 	@Test
 	public void encode() {
 		String pass = "1";
-		String salt = UUID.randomUUID().toString();
+		String salt = "222";
 		LOGGER.debug(salt);
-		LOGGER.debug(DigestUtils.shaHex(pass + salt));
+		LOGGER.debug(DigestUtils.md5Hex(pass + salt));
 	}
 
 	@Test

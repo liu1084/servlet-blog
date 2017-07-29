@@ -11,7 +11,9 @@ import java.util.List;
 public interface IUser {
 	User add(User user);
 
-	List<User> delete(List<User> users);
+	Boolean delete(List<User> users);
+
+	Boolean deleteUser(User user);
 
 	int update(User user);
 

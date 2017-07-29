@@ -65,7 +65,7 @@ public class AuthImpl implements IAuth {
 	public boolean checkPasswordValid(String username, String password) {
 		boolean result = false;
 		String salt = getSaltByUsername(username);
-
+		String pass = DigestUtils.md5Hex(password + salt);
 		Connection connection = null;
 		try {
 			connection = DataSource.getInstance().getConnection();
@@ -76,7 +76,7 @@ public class AuthImpl implements IAuth {
 			stringBuilder.append(" AND t1.password = ? ");
 			PreparedStatement statement = connection.prepareStatement(stringBuilder.toString());
 			statement.setString(1, username);
-			statement.setString(2, DigestUtils.shaHex(password + salt));
+			statement.setString(2, pass);
 			ResultSet resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {

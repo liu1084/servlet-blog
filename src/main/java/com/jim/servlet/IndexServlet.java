@@ -16,7 +16,7 @@ import java.io.IOException;
  * Created by jim on 2017/7/17.
  * This class is ...
  */
-@WebServlet(name = "index", urlPatterns = {"", "/"}, loadOnStartup = 1)
+@WebServlet(name = "index", urlPatterns = {""}, loadOnStartup = 1)
 public class IndexServlet extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IndexServlet.class);
 	@Override

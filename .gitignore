@@ -2,3 +2,6 @@ out
 target
 *.iml
 .idea
+node_modules
+test-output
+dist

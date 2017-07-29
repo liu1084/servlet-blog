@@ -10,6 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     List<User> users = (List<User>) request.getAttribute("users");
+    String appPath = request.getContextPath();
 %>
 <html>
 <head>
@@ -38,11 +39,19 @@
             <span><%=user.getEmail()%></span>
 
             <span>
-                <button onclick="">X</button>
+                <button data-user-id="<%=user.getId()%>" class="delete-user">X</button>
             </span>
         </li>
         <%}%>
     </ul>
 </header>
+
+<script>
+    var appPath = '<%=appPath%>';
+    console.log(appPath);
+</script>
+<script src="<%=appPath%>/static/node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<script src="<%=appPath%>/static/app/index/index.js" type="text/javascript"></script>
+
 </body>
 </html>

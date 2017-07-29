@@ -22,22 +22,19 @@ import java.util.UUID;
 public class UserImpl implements IUser {
 	@Override
 	public User add(User user) {
-		User result = new User();
 		Connection connection = null;
 		try {
 			connection = DataSource.getInstance().getConnection();
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.append(" INSERT INTO user (username, password, email, salt) VALUES (?,?,?,?)");
 			PreparedStatement statement = connection.prepareStatement(stringBuilder.toString());
-			statement.setString(1, user.getUsername());
 			String salt = UUID.randomUUID().toString();
-			statement.setString(2, DigestUtils.shaHex(user.getPassword() + salt));
+			String pass = DigestUtils.md5Hex(user.getPassword() + salt);
+			statement.setString(1, user.getUsername());
+			statement.setString(2, pass);
 			statement.setString(3, user.getEmail());
 			statement.setString(4, salt);
-
-			if (statement.execute()) {
-				result = user;
-			}
+			statement.execute();
 
 		} catch (PropertyVetoException e) {
 			e.printStackTrace();
@@ -52,30 +49,28 @@ public class UserImpl implements IUser {
 				}
 			}
 		}
-		return result;
+		return user;
 	}
 
 	@Override
-	public List<User> delete(List<User> users) {
+	public Boolean delete(List<User> users) {
 		int length = users.size();
 		Boolean[] result = new Boolean[length];
 		for (int i = 0; i < length; i++) {
 			result[i] = deleteUser(users.get(i));
 		}
 
-		if (ArrayUtils.contains(result, false)) {
-			return new ArrayList<>();
-		}
-		return users;
+		return !ArrayUtils.contains(result, false);
 	}
 
-	private Boolean deleteUser(User user) {
+	@Override
+	public Boolean deleteUser(User user) {
 		Boolean result = false;
 		Connection connection = null;
 		try {
 			connection = DataSource.getInstance().getConnection();
 			StringBuilder stringBuilder = new StringBuilder();
-			stringBuilder.append(" DELETE FROM user t1 WHERE t1.id = ? ");
+			stringBuilder.append(" DELETE FROM user WHERE id = ? ");
 
 			PreparedStatement statement = connection.prepareStatement(stringBuilder.toString());
 			statement.setString(1, user.getId().toString());
